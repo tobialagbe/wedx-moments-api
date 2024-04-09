@@ -59,9 +59,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/events/{event}/media', 'MediaController@store');
     Route::delete('/media/{media}', 'MediaController@destroy');
 
+    Route::get('/events/{event}/media', 'MediaController@fetchAllMediaForEvent');
+    Route::get('/media/{media}', 'MediaController@fetchSingleMedia');
+
     // Billing/Payment Routes
     Route::post('/events/{event}/payments', 'PaymentController@store');
     Route::get('/events/{event}/payments', 'PaymentController@show');
+
+    Route::get('/dashboard/data', 'DashboardController@dashboardData');
+
 });
 
 // Public Access Routes (No Auth Required)

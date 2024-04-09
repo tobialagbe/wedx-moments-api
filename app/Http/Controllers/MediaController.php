@@ -51,4 +51,37 @@ class MediaController extends Controller
             return $this->exceptionResponse($e);
         }
     }
+
+    public function fetchAllMediaForEvent(Request $request, Event $event)
+    {
+        try {
+            $this->authorize('view', $event);
+            $mediaItems = $event->media()->withCount('likes')->withCount('comments')->paginate(100);
+            return $this->successResponse($mediaItems);
+        } catch (\Exception $e) {
+            return $this->exceptionResponse($e);
+        }
+    }
+
+    public function fetchSingleMedia($mediaId)
+    {
+        try {
+            $mediaItem = Media::withCount('likes')->findOrFail($mediaId);
+            return $this->successResponse($mediaItem);
+        } catch (\Exception $e) {
+            return $this->exceptionResponse($e);
+        }
+    }
+
+    public function fetchComments(Request $request, $mediaId)
+    {
+        try {
+            $mediaItem = Media::findOrFail($mediaId);
+            $comments = $mediaItem->comments()->paginate(100);
+            return $this->successResponse($comments);
+        } catch (\Exception $e) {
+            return $this->exceptionResponse($e);
+        }
+    }
+
 }
